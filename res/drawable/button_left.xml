@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?> 
 
 <!--
     Wi-Fi Widget - Minimalistic Android Wi-Fi Widget
@@ -18,8 +18,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  -->
  
-<resources>
-    <string name="app_name">Wi-Fi Widget</string>
-    <string name="disconnected">Offline</string>    
-    <string name="network_list">Click to choose network</string>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"> 
+ 
+    <item android:state_pressed="true"
+        android:drawable="@drawable/inner_press_l" /> 
+ 
+<!--    <item android:state_focused="true" android:state_enabled="true"-->
+<!--        android:state_window_focused="true"-->
+<!--        android:drawable="@drawable/appwidget_inner_focus_l" /> -->
+ 
+    <item
+         android:drawable="@android:color/transparent" /> 
+</selector>

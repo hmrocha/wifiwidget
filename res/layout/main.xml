@@ -19,19 +19,48 @@
  -->
  
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:id="@+id/widget"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/appwidget_bg"
-    android:gravity="center"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/appwidget_bg">
+    
+    <LinearLayout
+        android:id="@+id/btn_wifi"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:background="@drawable/button_up"
     >
-<TextView
-    android:id="@+id/ssid"
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent" 
-    android:gravity="center" 
-    android:textStyle="bold" 
-    android:singleLine="true"
-    android:ellipsize="marquee"
-    android:textColor="#FFFFFF"/>
-</LinearLayout>
+    <ImageView
+        android:id="@+id/img_wifi"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:scaleType="center"
+    />
+    </LinearLayout>
+<!--    <ImageView-->
+<!--        android:id="@+id/divider"-->
+<!--        android:layout_width="1dip"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/appwidget_divider"-->
+<!--    />-->
+            
+    <LinearLayout
+        android:id="@+id/btn_ssid"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:background="@drawable/button_down"
+    >
+    <TextView
+        android:id="@+id/ssid"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" 
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+    />
+    </LinearLayout>    
+ </LinearLayout>
