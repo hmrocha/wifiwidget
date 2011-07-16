@@ -20,6 +20,5 @@
  
 <resources>
     <string name="app_name">Wi-Fi Widget</string>
-    <string name="disconnected">Offline</string>    
-    <string name="network_list">Click to choose network</string>
+    <string name="settings">Wi-Fi networks</string>
 </resources>

@@ -23,44 +23,51 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/appwidget_bg">
+	android:background="@drawable/appwidget_bg"> 
     
     <LinearLayout
         android:id="@+id/btn_wifi"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_weight="1"
-        android:background="@drawable/button_up"
-    >
-    <ImageView
-        android:id="@+id/img_wifi"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:scaleType="center"
-    />
+        android:padding="0dp"
+        android:background="@drawable/button_up">
+        
+    	<ImageView
+        	android:id="@+id/img_wifi"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_weight="1"
+	        android:scaleType="center"
+    	/>
+    
     </LinearLayout>
-<!--    <ImageView-->
-<!--        android:id="@+id/divider"-->
-<!--        android:layout_width="1dip"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/appwidget_divider"-->
-<!--    />-->
-            
+
+	<ImageView 
+		android:id="@+id/divider"
+		android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="@drawable/divider"
+     />
+  
     <LinearLayout
         android:id="@+id/btn_ssid"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:layout_weight="1"
-        android:background="@drawable/button_down"
-    >
-    <TextView
-        android:id="@+id/ssid"
-        android:layout_width="fill_parent" 
-        android:layout_height="fill_parent" 
-        android:layout_weight="1"
+        android:padding="0dp"
         android:gravity="center"
-        android:textColor="#FFFFFF"
-    />
-    </LinearLayout>    
+        android:background="@drawable/button_down">
+        
+	    <TextView
+	        android:id="@+id/ssid"
+	        android:layout_width="fill_parent" 
+	        android:layout_height="wrap_content" 
+	        android:layout_weight="1"
+	        android:gravity="center"
+	        android:textColor="#FFFFFF"
+	    />
+	    
+	</LinearLayout>
+	    
  </LinearLayout>

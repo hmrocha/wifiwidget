@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -40,10 +39,10 @@ public class WifiAppWidgetProvider extends AppWidgetProvider {
 			int[] appWidgetIds) {
 		WifiAppWidgetProvider.previousState = getWifiState(context);
 		// Update each requested appWidgetId
-		RemoteViews view = buildUpdate(context, -1);
+		RemoteViews views = buildUpdate(context, -1);
 
 		for (int i = 0; i < appWidgetIds.length; i++) {
-			appWidgetManager.updateAppWidget(appWidgetIds[i], view);
+			appWidgetManager.updateAppWidget(appWidgetIds[i], views);
 		}
 	}
 
@@ -139,8 +138,8 @@ public class WifiAppWidgetProvider extends AppWidgetProvider {
 	static RemoteViews buildUpdate(Context context, int appWidgetId) {
 		RemoteViews views = new RemoteViews(context.getPackageName(),
 				R.layout.main);
-		views.setOnClickPendingIntent(R.id.btn_wifi, getLaunchPendingIntent(
-				context, appWidgetId, BUTTON_WIFI));
+		views.setOnClickPendingIntent(R.id.btn_wifi,
+				getLaunchPendingIntent(context, appWidgetId, BUTTON_WIFI));
 		Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
 		PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
 		views.setOnClickPendingIntent(R.id.btn_ssid, pi);
@@ -170,51 +169,34 @@ public class WifiAppWidgetProvider extends AppWidgetProvider {
 	}
 
 	/**
-	 * Updates the buttons based on the underlying states of wifi, etc.
+	 * Updates the buttons based on the underlying states of Wi-Fi.
 	 * 
 	 * @param views
 	 *            The RemoteViews to update.
 	 * @param context
+	 *            the Context to get connectivity info from.
 	 */
 	private static void updateButtons(RemoteViews views, Context context) {
 		switch (getWifiState(context)) {
 		case STATE_DISABLED:
-			views.setImageViewResource(R.id.img_wifi,
-					R.drawable.ic_appwidget_settings_wifi_off);
-			views.setViewVisibility(R.id.btn_ssid, View.GONE);
-			WifiAppWidgetProvider.previousState = STATE_DISABLED;
+			changeWidgetToDisabled(views);
 			break;
 		case STATE_ENABLED:
-			views.setImageViewResource(R.id.img_wifi,
-					R.drawable.ic_appwidget_settings_wifi_on);
-			if (isConnected(context)) {
-				Log.d(TAG, "isConnected(context)");
-				String ssid = getSSID(context);
-				Log.d(TAG, "ssid = " + ssid);
-				setSSID(views, ssid);
-			} else {
-				views.setTextViewText(R.id.ssid, context
-						.getText(R.string.network_list));
-			}
-			views.setViewVisibility(R.id.btn_ssid, View.VISIBLE);
-			WifiAppWidgetProvider.previousState = STATE_ENABLED;
+			changeWidgetToEnabled(views, context);
 			break;
 		case STATE_INTERMEDIATE:
-			if (WifiAppWidgetProvider.previousState == STATE_DISABLED) {
-				views.setImageViewResource(R.id.img_wifi,
-						R.drawable.ic_appwidget_settings_wifi_on);
-			} else {
-				views.setImageViewResource(R.id.img_wifi,
-						R.drawable.ic_appwidget_settings_wifi_off);
-			}
+			changeWidgetToIntermediate(views);
 			break;
 		}
 	}
 
 	/**
-	 * SSID of the Wi-Fi network we're connected to
+	 * SSID of the Wi-Fi network we're connected to.
+	 * 
+	 * pre-condition: isConnected(context)
 	 * 
 	 * @param context
+	 *            the Context to get connection info from.
 	 * @return the SSID of the Wi-Fi network we're connected to
 	 */
 	private static String getSSID(Context context) {
@@ -223,8 +205,62 @@ public class WifiAppWidgetProvider extends AppWidgetProvider {
 		return wifiManager.getConnectionInfo().getSSID();
 	}
 
+	/**
+	 * Display network SSID
+	 * 
+	 * @param views
+	 *            the RemoteViews to update
+	 * @param ssid
+	 *            the network SSID
+	 */
 	private static void setSSID(RemoteViews views, String ssid) {
 		views.setTextViewText(R.id.ssid, ssid);
 	}
 
+	/**
+	 * Change widget to disable state.
+	 * 
+	 * @param views
+	 *            the RemoteViews to update.
+	 */
+	private static void changeWidgetToDisabled(RemoteViews views) {
+		views.setImageViewResource(R.id.img_wifi, R.drawable.wifi_off);
+		views.setViewVisibility(R.id.divider, View.GONE);
+		views.setViewVisibility(R.id.btn_ssid, View.GONE);
+		WifiAppWidgetProvider.previousState = STATE_DISABLED;
+	}
+
+	/**
+	 * Change widget to enabled (connected or disconnected) state.
+	 * 
+	 * @param views
+	 *            the RemoteViews to update.
+	 * @param context
+	 *            the Context to get connectivity info.
+	 */
+	private static void changeWidgetToEnabled(RemoteViews views, Context context) {
+		views.setImageViewResource(R.id.img_wifi, R.drawable.wifi_on);
+		if (isConnected(context)) {
+			setSSID(views, getSSID(context));
+		} else {
+			views.setTextViewText(R.id.ssid, context.getText(R.string.settings));
+		}		
+		views.setViewVisibility(R.id.divider, View.VISIBLE);
+		views.setViewVisibility(R.id.btn_ssid, View.VISIBLE);
+		WifiAppWidgetProvider.previousState = STATE_ENABLED;
+	}
+
+	/**
+	 * Change widget to intermediate state.
+	 * 
+	 * @param views
+	 *            the RemoteViews to update.
+	 */
+	private static void changeWidgetToIntermediate(RemoteViews views) {
+		if (WifiAppWidgetProvider.previousState == STATE_DISABLED) {
+			views.setImageViewResource(R.id.img_wifi, R.drawable.wifi_on);
+		} else {
+			views.setImageViewResource(R.id.img_wifi, R.drawable.wifi_off);
+		}
+	}
 }
